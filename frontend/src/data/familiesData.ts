@@ -1,0 +1,402 @@
+import { getStorageUrl } from '../services/supabaseStorage';
+
+export interface HappyFamily {
+  id: string;
+  image: string;
+  puppyName: string;
+  location: string;
+  quote: string;
+  date: string;
+}
+
+const RAW_FAMILIES: HappyFamily[] = [
+  {
+    "id": "family-1",
+    "image": "/images/happy-families_asset_0c10190d8a.webp",
+    "puppyName": "Teddy Pup #1",
+    "location": "Downtown Dubai",
+    "quote": "Our little angel brought so much joy into our home. Thank you TeddyPups!",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-2",
+    "image": "/images/happy-families_asset_0de39f1cec.webp",
+    "puppyName": "Teddy Pup #2",
+    "location": "Dubai Hills Estate",
+    "quote": "The healthiest, sweet-tempered Maltipoo we could ever dream of.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-3",
+    "image": "/images/happy-families_asset_10fdea4706.webp",
+    "puppyName": "Teddy Pup #3",
+    "location": "Palm Jumeirah",
+    "quote": "Downtown showroom visit was an unforgettable experience. Top tier care!",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-4",
+    "image": "/images/happy-families_asset_141258a27c.webp",
+    "puppyName": "Teddy Pup #4",
+    "location": "Jumeirah Golf Estates",
+    "quote": "Arrived in Abu Dhabi safely with all official UAE pedigree passports.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-5",
+    "image": "/images/happy-families_asset_15902b32f6.webp",
+    "puppyName": "Teddy Pup #5",
+    "location": "Saadiyat Island Abu Dhabi",
+    "quote": "Can't imagine our family without our tiny fluffy princess now.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-6",
+    "image": "/images/happy-families_asset_1ab7ec62ad.webp",
+    "puppyName": "Teddy Pup #6",
+    "location": "Dubai Marina",
+    "quote": "Incredible service, vet support, and lifelong guidance from day one.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-7",
+    "image": "/images/happy-families_asset_1d79749e2f.webp",
+    "puppyName": "Teddy Pup #7",
+    "location": "Arabian Ranches",
+    "quote": "Our little angel brought so much joy into our home. Thank you TeddyPups!",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-8",
+    "image": "/images/happy-families_asset_1f5725855d.webp",
+    "puppyName": "Teddy Pup #8",
+    "location": "Al Barari",
+    "quote": "The healthiest, sweet-tempered Maltipoo we could ever dream of.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-9",
+    "image": "/images/happy-families_asset_1fff2017f2.webp",
+    "puppyName": "Teddy Pup #9",
+    "location": "Downtown Dubai",
+    "quote": "Downtown showroom visit was an unforgettable experience. Top tier care!",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-10",
+    "image": "/images/happy-families_asset_2133207b13.webp",
+    "puppyName": "Teddy Pup #10",
+    "location": "Dubai Hills Estate",
+    "quote": "Arrived in Abu Dhabi safely with all official UAE pedigree passports.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-11",
+    "image": "/images/happy-families_asset_21ca98e775.webp",
+    "puppyName": "Teddy Pup #11",
+    "location": "Palm Jumeirah",
+    "quote": "Can't imagine our family without our tiny fluffy princess now.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-12",
+    "image": "/images/happy-families_asset_2d571666ee.webp",
+    "puppyName": "Teddy Pup #12",
+    "location": "Jumeirah Golf Estates",
+    "quote": "Incredible service, vet support, and lifelong guidance from day one.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-13",
+    "image": "/images/happy-families_asset_31bf1a52bf.webp",
+    "puppyName": "Teddy Pup #13",
+    "location": "Saadiyat Island Abu Dhabi",
+    "quote": "Our little angel brought so much joy into our home. Thank you TeddyPups!",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-14",
+    "image": "/images/happy-families_asset_331b63cb74.webp",
+    "puppyName": "Teddy Pup #14",
+    "location": "Dubai Marina",
+    "quote": "The healthiest, sweet-tempered Maltipoo we could ever dream of.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-15",
+    "image": "/images/happy-families_asset_3dd44e34a9.webp",
+    "puppyName": "Teddy Pup #15",
+    "location": "Arabian Ranches",
+    "quote": "Downtown showroom visit was an unforgettable experience. Top tier care!",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-16",
+    "image": "/images/happy-families_asset_46f96a30ce.webp",
+    "puppyName": "Teddy Pup #16",
+    "location": "Al Barari",
+    "quote": "Arrived in Abu Dhabi safely with all official UAE pedigree passports.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-17",
+    "image": "/images/happy-families_asset_47512a9f97.webp",
+    "puppyName": "Teddy Pup #17",
+    "location": "Downtown Dubai",
+    "quote": "Can't imagine our family without our tiny fluffy princess now.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-18",
+    "image": "/images/happy-families_asset_49eba4c2f7.webp",
+    "puppyName": "Teddy Pup #18",
+    "location": "Dubai Hills Estate",
+    "quote": "Incredible service, vet support, and lifelong guidance from day one.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-19",
+    "image": "/images/happy-families_asset_4c8cf30b9e.webp",
+    "puppyName": "Teddy Pup #19",
+    "location": "Palm Jumeirah",
+    "quote": "Our little angel brought so much joy into our home. Thank you TeddyPups!",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-20",
+    "image": "/images/happy-families_asset_53e1f22d83.webp",
+    "puppyName": "Teddy Pup #20",
+    "location": "Jumeirah Golf Estates",
+    "quote": "The healthiest, sweet-tempered Maltipoo we could ever dream of.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-21",
+    "image": "/images/happy-families_asset_557531e43e.webp",
+    "puppyName": "Teddy Pup #21",
+    "location": "Saadiyat Island Abu Dhabi",
+    "quote": "Downtown showroom visit was an unforgettable experience. Top tier care!",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-22",
+    "image": "/images/happy-families_asset_6680100a94.webp",
+    "puppyName": "Teddy Pup #22",
+    "location": "Dubai Marina",
+    "quote": "Arrived in Abu Dhabi safely with all official UAE pedigree passports.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-23",
+    "image": "/images/happy-families_asset_689804fefd.webp",
+    "puppyName": "Teddy Pup #23",
+    "location": "Arabian Ranches",
+    "quote": "Can't imagine our family without our tiny fluffy princess now.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-24",
+    "image": "/images/happy-families_asset_6b81ff2467.webp",
+    "puppyName": "Teddy Pup #24",
+    "location": "Al Barari",
+    "quote": "Incredible service, vet support, and lifelong guidance from day one.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-25",
+    "image": "/images/happy-families_asset_6ca504d64b.webp",
+    "puppyName": "Teddy Pup #25",
+    "location": "Downtown Dubai",
+    "quote": "Our little angel brought so much joy into our home. Thank you TeddyPups!",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-26",
+    "image": "/images/happy-families_asset_6fcc16dd24.webp",
+    "puppyName": "Teddy Pup #26",
+    "location": "Dubai Hills Estate",
+    "quote": "The healthiest, sweet-tempered Maltipoo we could ever dream of.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-27",
+    "image": "/images/happy-families_asset_7129a3388b.webp",
+    "puppyName": "Teddy Pup #27",
+    "location": "Palm Jumeirah",
+    "quote": "Downtown showroom visit was an unforgettable experience. Top tier care!",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-28",
+    "image": "/images/happy-families_asset_718c9d1bfa.webp",
+    "puppyName": "Teddy Pup #28",
+    "location": "Jumeirah Golf Estates",
+    "quote": "Arrived in Abu Dhabi safely with all official UAE pedigree passports.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-29",
+    "image": "/images/happy-families_asset_761309ba58.webp",
+    "puppyName": "Teddy Pup #29",
+    "location": "Saadiyat Island Abu Dhabi",
+    "quote": "Can't imagine our family without our tiny fluffy princess now.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-30",
+    "image": "/images/happy-families_asset_771fcbf783.webp",
+    "puppyName": "Teddy Pup #30",
+    "location": "Dubai Marina",
+    "quote": "Incredible service, vet support, and lifelong guidance from day one.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-31",
+    "image": "/images/happy-families_asset_7914313f13.webp",
+    "puppyName": "Teddy Pup #31",
+    "location": "Arabian Ranches",
+    "quote": "Our little angel brought so much joy into our home. Thank you TeddyPups!",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-32",
+    "image": "/images/happy-families_asset_79c1d3903f.webp",
+    "puppyName": "Teddy Pup #32",
+    "location": "Al Barari",
+    "quote": "The healthiest, sweet-tempered Maltipoo we could ever dream of.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-33",
+    "image": "/images/happy-families_asset_7a1aaf8064.webp",
+    "puppyName": "Teddy Pup #33",
+    "location": "Downtown Dubai",
+    "quote": "Downtown showroom visit was an unforgettable experience. Top tier care!",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-34",
+    "image": "/images/happy-families_asset_7bfa018c81.webp",
+    "puppyName": "Teddy Pup #34",
+    "location": "Dubai Hills Estate",
+    "quote": "Arrived in Abu Dhabi safely with all official UAE pedigree passports.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-35",
+    "image": "/images/happy-families_asset_7fd2aeb732.webp",
+    "puppyName": "Teddy Pup #35",
+    "location": "Palm Jumeirah",
+    "quote": "Can't imagine our family without our tiny fluffy princess now.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-36",
+    "image": "/images/happy-families_asset_8762f62681.webp",
+    "puppyName": "Teddy Pup #36",
+    "location": "Jumeirah Golf Estates",
+    "quote": "Incredible service, vet support, and lifelong guidance from day one.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-37",
+    "image": "/images/happy-families_asset_961c4dfb21.webp",
+    "puppyName": "Teddy Pup #37",
+    "location": "Saadiyat Island Abu Dhabi",
+    "quote": "Our little angel brought so much joy into our home. Thank you TeddyPups!",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-38",
+    "image": "/images/happy-families_asset_9ae584ca5e.webp",
+    "puppyName": "Teddy Pup #38",
+    "location": "Dubai Marina",
+    "quote": "The healthiest, sweet-tempered Maltipoo we could ever dream of.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-39",
+    "image": "/images/happy-families_asset_a01020b4a9.webp",
+    "puppyName": "Teddy Pup #39",
+    "location": "Arabian Ranches",
+    "quote": "Downtown showroom visit was an unforgettable experience. Top tier care!",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-40",
+    "image": "/images/happy-families_asset_a2636aa00d.webp",
+    "puppyName": "Teddy Pup #40",
+    "location": "Al Barari",
+    "quote": "Arrived in Abu Dhabi safely with all official UAE pedigree passports.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-41",
+    "image": "/images/happy-families_asset_a347daa6ef.webp",
+    "puppyName": "Teddy Pup #41",
+    "location": "Downtown Dubai",
+    "quote": "Can't imagine our family without our tiny fluffy princess now.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-42",
+    "image": "/images/happy-families_asset_a98af0351c.webp",
+    "puppyName": "Teddy Pup #42",
+    "location": "Dubai Hills Estate",
+    "quote": "Incredible service, vet support, and lifelong guidance from day one.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-43",
+    "image": "/images/happy-families_asset_b0b448315d.webp",
+    "puppyName": "Teddy Pup #43",
+    "location": "Palm Jumeirah",
+    "quote": "Our little angel brought so much joy into our home. Thank you TeddyPups!",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-44",
+    "image": "/images/happy-families_asset_b9ff1044ee.webp",
+    "puppyName": "Teddy Pup #44",
+    "location": "Jumeirah Golf Estates",
+    "quote": "The healthiest, sweet-tempered Maltipoo we could ever dream of.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-45",
+    "image": "/images/happy-families_asset_bad73e8390.webp",
+    "puppyName": "Teddy Pup #45",
+    "location": "Saadiyat Island Abu Dhabi",
+    "quote": "Downtown showroom visit was an unforgettable experience. Top tier care!",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-46",
+    "image": "/images/happy-families_asset_c04108f173.webp",
+    "puppyName": "Teddy Pup #46",
+    "location": "Dubai Marina",
+    "quote": "Arrived in Abu Dhabi safely with all official UAE pedigree passports.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-47",
+    "image": "/images/happy-families_asset_c17af84ed8.webp",
+    "puppyName": "Teddy Pup #47",
+    "location": "Arabian Ranches",
+    "quote": "Can't imagine our family without our tiny fluffy princess now.",
+    "date": "Recent Adoption"
+  },
+  {
+    "id": "family-48",
+    "image": "/images/happy-families_asset_c20375b600.webp",
+    "puppyName": "Teddy Pup #48",
+    "location": "Al Barari",
+    "quote": "Incredible service, vet support, and lifelong guidance from day one.",
+    "date": "Recent Adoption"
+  }
+];
+
+export const HAPPY_FAMILIES: HappyFamily[] = RAW_FAMILIES.map((f) => ({
+  ...f,
+  image: getStorageUrl(f.image),
+}));

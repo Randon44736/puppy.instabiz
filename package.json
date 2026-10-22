@@ -1,0 +1,13 @@
+{
+  "name": "teddypups-fullstack",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fullstack clone of TeddyPups U.A.E. website",
+  "scripts": {
+    "dev:backend": "cd backend && node dist/server.js",
+    "dev:frontend": "cd frontend && npm run dev -- --port 3000",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "build": "cd backend && npm run build && cd ../frontend && npm run build"
+  }
+}

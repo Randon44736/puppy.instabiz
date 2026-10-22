@@ -1,0 +1,44 @@
+// src/data/faqData.ts
+export interface FAQItem {
+  category: string;
+  question: string;
+  answer: string;
+}
+
+export const FAQ_ITEMS: FAQItem[] = [
+  {
+    "category": "Adoption & Showroom",
+    "question": "Can I visit and meet the puppies in person in Dubai?",
+    "answer": "Yes! We warmly welcome families to our private Downtown Dubai showroom by appointment. You can cuddle and interact with our available puppies in a sanitized, comfortable nursery setting before making your decision."
+  },
+  {
+    "category": "Adoption & Showroom",
+    "question": "What is the adoption process at TeddyPups?",
+    "answer": "The process is seamless and transparent: (1) Browse available puppies or book a showroom consultation; (2) Choose your puppy and review comprehensive veterinary health files; (3) Complete adoption reservation; (4) Home delivery or showroom pickup with complete starter kit and health passport."
+  },
+  {
+    "category": "Health & Guarantee",
+    "question": "Are TeddyPups puppies vaccinated, microchipped, and vet certified?",
+    "answer": "Every puppy arrives fully microchipped with an international ISO transponder, vaccinated according to UAE veterinary guidelines, and examined by certified veterinarians. We include a comprehensive health certificate and 1-year genetic health guarantee."
+  },
+  {
+    "category": "Health & Guarantee",
+    "question": "Are Maltipoos and Teacup Poodles hypoallergenic?",
+    "answer": "Yes! Maltipoos, Poodles, and Cavapoos are famously low-shedding to non-shedding with hypoallergenic hair rather than fur, making them ideal companions for individuals with allergies or apartment living in the UAE."
+  },
+  {
+    "category": "Travel & Delivery",
+    "question": "Do you offer delivery across the UAE and internationally?",
+    "answer": "We provide VIP door-to-door hand delivery in temperature-controlled vehicles throughout Dubai, Abu Dhabi, Sharjah, and all other Emirates. For international families, we arrange flight nanny hand-courier delivery with all import clearances."
+  },
+  {
+    "category": "Care & Heritage",
+    "question": "What is a Korean Teacup puppy?",
+    "answer": "Korean teacup puppies are bred by specialized pedigree nurseries in South Korea known for their petite stature, doll-like facial proportions, short button snouts, and thick teddy bear coats. They are raised in loving home environments with utmost medical care."
+  },
+  {
+    "category": "Care & Heritage",
+    "question": "What is included with my puppy on adoption day?",
+    "answer": "You receive the official Health Passport, UAE Microchip registration, 1-year health warranty contract, a deluxe starter kit (sample premium kibble, plush scent blanket, harness & leash, vitamins, chew toys), and lifetime 24/7 care support."
+  }
+];
