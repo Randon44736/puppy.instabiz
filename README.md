@@ -1,10 +1,14 @@
 # 🐾 TeddyPups U.A.E. — Luxury Teacup Puppy Boutique Web Platform
 
+[![Live Website](https://img.shields.io/badge/Live_Website-puppy--instabiz--clone.vercel.app-2ea44f?style=for-the-badge&logo=vercel&logoColor=white)](https://puppy-instabiz-clone.vercel.app/)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Supabase](https://img.shields.io/badge/Supabase-Storage-3ECF8E?logo=supabase&logoColor=white)](https://supabase.com/)
 [![License](https://img.shields.io/badge/License-Proprietary-E06A3B)]()
+
+> 🌐 **Live Website Link**: **[https://puppy-instabiz-clone.vercel.app/](https://puppy-instabiz-clone.vercel.app/)**  
+> *Click above to explore the live, fully interactive platform on desktop or mobile!*
 
 > A bespoke, pixel-accurate, high-fidelity luxury digital boutique created for **TeddyPups U.A.E.** — Dubai's premier boutique for pedigree teacup and micro puppies (Korean Teacup Poodles, Maltipoos, Pomeranians, and Cavapoos).
 
@@ -126,14 +130,15 @@ The REST API will listen on **[http://localhost:5000](http://localhost:5000)**.
 
 ---
 
-## 🌐 Deployment
+## 🌐 Deployment & Live URL
 
-The frontend is ready for immediate 1-click deployment to **Vercel**, **Netlify**, or **Cloudflare Pages**:
+- **Production Live URL**: **[https://puppy-instabiz-clone.vercel.app/](https://puppy-instabiz-clone.vercel.app/)**
+- **Hosting Platform**: Vercel
 - **Framework Preset**: Vite
-- **Root Directory**: `frontend`
+- **Root Directory**: `.` (Root with `frontend/dist` output or `frontend`)
 - **Build Command**: `npm run build`
-- **Output Directory**: `dist`
-- Client-side routing rewrites are pre-configured in `frontend/vercel.json`.
+- **Output Directory**: `frontend/dist`
+- Client-side routing rewrites are pre-configured in `vercel.json`.
 
 ---
 
