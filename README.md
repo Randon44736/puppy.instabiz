@@ -1,14 +1,16 @@
 # 🐾 TeddyPups U.A.E. — Luxury Teacup Puppy Boutique Web Platform
 
-[![Live Website](https://img.shields.io/badge/Live_Website-puppy--instabiz--clone.vercel.app-2ea44f?style=for-the-badge&logo=vercel&logoColor=white)](https://puppy-instabiz-clone.vercel.app/)
+## 🌐 Live Website Demo
+### 👉 **[https://puppy-instabiz-clone.vercel.app/](https://puppy-instabiz-clone.vercel.app/)** 👈
+
+[![Live Demo](https://img.shields.io/badge/Open_Live_Site-puppy--instabiz--clone.vercel.app-2ea44f?style=for-the-badge&logo=vercel&logoColor=white)](https://puppy-instabiz-clone.vercel.app/)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Supabase](https://img.shields.io/badge/Supabase-Storage-3ECF8E?logo=supabase&logoColor=white)](https://supabase.com/)
-[![License](https://img.shields.io/badge/License-Proprietary-E06A3B)]()
 
-> 🌐 **Live Website Link**: **[https://puppy-instabiz-clone.vercel.app/](https://puppy-instabiz-clone.vercel.app/)**  
-> *Click above to explore the live, fully interactive platform on desktop or mobile!*
+> 🚀 **Live Production Link**: **[https://puppy-instabiz-clone.vercel.app/](https://puppy-instabiz-clone.vercel.app/)**  
+> *Click above to explore the live, fully interactive boutique with 60fps animations, Teddy mascot scroll journey, and showroom gallery on desktop or mobile!*
 
 > A bespoke, pixel-accurate, high-fidelity luxury digital boutique created for **TeddyPups U.A.E.** — Dubai's premier boutique for pedigree teacup and micro puppies (Korean Teacup Poodles, Maltipoos, Pomeranians, and Cavapoos).
 
