@@ -403,17 +403,31 @@ function calculateStops(probe: HTMLElement): JourneyData {
   };
 }
 
+const getWhatsAppTop = (): number => {
+  const bar = document.querySelector('[data-whatsapp-bar]');
+  const rect = bar?.getClientRects().length ? bar.getBoundingClientRect() : null;
+  return rect && rect.height ? rect.top : window.innerHeight - 6;
+};
+
 function evaluateJourney(journey: JourneyData, scrollY: number) {
   const isMobile = journey.lane;
+  if (isMobile) {
+    const waTop = getWhatsAppTop();
+    for (const a of journey.stops) {
+      if (a.track.kind === 'screen') {
+        a.track.top = waTop - 159 * a.s;
+      }
+    }
+  }
+
   const stops = journey.stops;
   const holds = journey.holds;
   const clientWidth = document.documentElement.clientWidth;
   const headerHeight = (document.getElementById('site-header')?.offsetHeight ?? 76) + 10;
-  const whatsappBar = document.querySelector('[data-whatsapp-bar]');
-  const whatsappTop = whatsappBar?.getClientRects().length ? whatsappBar.getBoundingClientRect().top : window.innerHeight;
+  const whatsappTop = isMobile ? getWhatsAppTop() : (document.querySelector('[data-whatsapp-bar]')?.getBoundingClientRect().top ?? window.innerHeight);
 
   const safe = isMobile
-    ? { left: 10, top: headerHeight, right: clientWidth - 10, bottom: window.innerHeight - 6 + 40 }
+    ? { left: 10, top: headerHeight, right: clientWidth - 10, bottom: whatsappTop + 40 }
     : { left: 10, top: headerHeight, right: clientWidth - 10, bottom: Math.min(window.innerHeight, whatsappTop) - 10 };
 
   const { k, t } = findSegment(holds, scrollY);
@@ -597,7 +611,10 @@ export const PuppyScrollJourney: React.FC = () => {
     let scrollDirection = 1;
     let isSettlingToStop = false;
     let mobileSmoothPos: { x: number; y: number } | null = null;
+    let prevM = 0;
+    let laneWalkDist = 0;
     let basketActionTime = 0;
+    let ev = 0;
 
     const animLoop = () => {
       if (!journey || !puppet || !isActive) return;
@@ -664,11 +681,35 @@ export const PuppyScrollJourney: React.FC = () => {
       const curScale = evalResult.s + smoothOffset.s;
       let posX = evalResult.x + smoothOffset.x;
       let posY = evalResult.y + smoothOffset.y;
-      const isResting = evalResult.t === 0;
       const currentK = evalResult.k;
+      const waTop = journey.lane ? getWhatsAppTop() : 0;
+      let reachedRest = true;
+
+      if (isMobileScreen) {
+        if (!mobileSmoothPos) {
+          mobileSmoothPos = prevPos ? { x: prevPos.x, y: prevPos.y - prevM } : { x: posX, y: posY - waTop };
+        }
+        const smoothRate = 1 - Math.exp(-dt / 0.14);
+        mobileSmoothPos.x += (posX - mobileSmoothPos.x) * smoothRate;
+        mobileSmoothPos.y += (posY - waTop - mobileSmoothPos.y) * smoothRate;
+        reachedRest = Math.hypot(posX - mobileSmoothPos.x, posY - waTop - mobileSmoothPos.y) < 1.5;
+        posX = mobileSmoothPos.x;
+        posY = waTop + mobileSmoothPos.y;
+      } else {
+        if (mobileSmoothPos) {
+          smoothOffset.x = (prevPos?.x ?? posX) - evalResult.x;
+          smoothOffset.y = (prevPos?.y ?? posY) - evalResult.y;
+          posX = evalResult.x + smoothOffset.x;
+          posY = evalResult.y + smoothOffset.y;
+          mobileSmoothPos = null;
+        }
+      }
+      prevM = waTop;
 
       lastEval = { ...evalResult, x: posX, y: posY, s: curScale };
       setDataset(layer, 'anchor', isMobileScreen ? 'bottom' : 'top');
+      ev = isMobileScreen ? layer.getBoundingClientRect().top : 0;
+      const isResting = evalResult.t === 0 && reachedRest;
 
       // Resting at a stop vs walking
       if (isResting) {
@@ -744,6 +785,13 @@ export const PuppyScrollJourney: React.FC = () => {
         stationaryTimer = moveDelta > 0.25 ? 0 : stationaryTimer + dt;
 
         let isHop = evalResult.airborne;
+        if (journey.lane && evalResult.t > 0) {
+          const s0 = journey.stops[currentK];
+          const s1 = journey.stops[currentK + 1];
+          if (s0?.sink && evalResult.t < 0.22) isHop = scrollDirection > 0;
+          else if (s1?.sink && evalResult.t > 0.78) isHop = scrollDirection < 0;
+        }
+
         if (isHop) {
           puppet.setPose('hop');
           puppet.stride(0);
@@ -755,7 +803,7 @@ export const PuppyScrollJourney: React.FC = () => {
           puppet.stride(1);
         }
 
-        puppet.walkedTo(evalResult.walked / Math.max(0.05, curScale));
+        puppet.walkedTo((isMobileScreen ? (laneWalkDist += moveDelta) : evalResult.walked) / Math.max(0.05, curScale));
 
         if (prevPos) {
           const deltaX = posX - prevPos.x;
@@ -825,7 +873,7 @@ export const PuppyScrollJourney: React.FC = () => {
       const safeScale = Math.max(0.35, Math.min(1.8, Number.isFinite(curScale) ? curScale : 1));
       const safePosX = Number.isFinite(posX) ? posX : 0;
       const safePosY = Number.isFinite(posY) ? posY : 0;
-      actor.style.transform = `translate3d(${(safePosX - PUP_ANCHOR.x * safeScale).toFixed(2)}px, ${(safePosY - PUP_ANCHOR.y * safeScale).toFixed(2)}px, 0)`;
+      actor.style.transform = `translate3d(${(safePosX - PUP_ANCHOR.x * safeScale).toFixed(2)}px, ${(safePosY - PUP_ANCHOR.y * safeScale - ev).toFixed(2)}px, 0)`;
       body.style.transform = `scale(${safeScale.toFixed(4)})`;
       setDataset(layer, 'front', String(evalResult.front));
       setDataset(actor, 'holding', String(isResting));
@@ -868,7 +916,7 @@ export const PuppyScrollJourney: React.FC = () => {
               spawnHearts(
                 layer,
                 lastEval.x - PUP_ANCHOR.x * lastEval.s + (puppet!.facingDir > 0 ? 212 : PUPPET_W - 212) * lastEval.s,
-                lastEval.y - (PUP_ANCHOR.y - 40) * lastEval.s
+                lastEval.y - (PUP_ANCHOR.y - 40) * lastEval.s - ev
               );
             }
           },
@@ -900,7 +948,7 @@ export const PuppyScrollJourney: React.FC = () => {
             spawnHearts(
               layer,
               lastEval.x - PUP_ANCHOR.x * lastEval.s + (puppet!.facingDir > 0 ? 212 : PUPPET_W - 212) * lastEval.s,
-              lastEval.y - (PUP_ANCHOR.y - 40) * lastEval.s
+              lastEval.y - (PUP_ANCHOR.y - 40) * lastEval.s - ev
             );
           }
         },
@@ -991,6 +1039,10 @@ export const PuppyScrollJourney: React.FC = () => {
       delete docEl.dataset.pup;
       layer.hidden = true;
       delete layer.dataset.anchor;
+      ev = 0;
+      mobileSmoothPos = null;
+      prevM = 0;
+      laneWalkDist = 0;
       journey?.meta.forEach((m) => {
         if (m.scene) {
           delete m.scene.dataset.here;

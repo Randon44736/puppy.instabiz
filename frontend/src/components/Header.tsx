@@ -28,6 +28,17 @@ export const Header: React.FC = () => {
     setMobileOpen(false);
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileOpen]);
+
   const navItems = [
     { label: 'Home', path: '/' },
     { label: 'Puppies', path: '/puppies' },
@@ -117,10 +128,10 @@ export const Header: React.FC = () => {
 
       {/* Mobile Menu Dialog */}
       {mobileOpen && (
-        <div
-          role="dialog"
+        <dialog
+          open
           aria-label="Site menu"
-          className="fixed inset-0 z-50 flex h-dvh w-screen flex-col bg-honey p-0 text-cocoa"
+          className="tp-menu fixed inset-0 z-50 flex h-dvh w-screen flex-col bg-honey p-0 text-cocoa border-0"
         >
           <div className="flex h-full flex-col gutter pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-5">
             <div className="flex items-center justify-between">
@@ -167,7 +178,7 @@ export const Header: React.FC = () => {
               <p className="text-center text-sm font-medium">+971 54 167 6733</p>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
     </header>
   );
