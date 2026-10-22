@@ -406,7 +406,7 @@ function calculateStops(probe: HTMLElement): JourneyData {
 const getWhatsAppTop = (): number => {
   const bar = document.querySelector('[data-whatsapp-bar]');
   const rect = bar?.getClientRects().length ? bar.getBoundingClientRect() : null;
-  return rect && rect.height ? rect.top : window.innerHeight - 6;
+  return rect && rect.height > 0 ? rect.top : window.innerHeight - 6;
 };
 
 function evaluateJourney(journey: JourneyData, scrollY: number) {
@@ -424,10 +424,12 @@ function evaluateJourney(journey: JourneyData, scrollY: number) {
   const holds = journey.holds;
   const clientWidth = document.documentElement.clientWidth;
   const headerHeight = (document.getElementById('site-header')?.offsetHeight ?? 76) + 10;
-  const whatsappTop = isMobile ? getWhatsAppTop() : (document.querySelector('[data-whatsapp-bar]')?.getBoundingClientRect().top ?? window.innerHeight);
+  const whatsappBar = document.querySelector('[data-whatsapp-bar]');
+  const barRect = whatsappBar?.getClientRects().length ? whatsappBar.getBoundingClientRect() : null;
+  const whatsappTop = barRect && barRect.height > 0 ? barRect.top : window.innerHeight;
 
   const safe = isMobile
-    ? { left: 10, top: headerHeight, right: clientWidth - 10, bottom: whatsappTop + 40 }
+    ? { left: 10, top: headerHeight, right: clientWidth - 10, bottom: (barRect && barRect.height > 0 ? barRect.top : window.innerHeight - 6) + 40 }
     : { left: 10, top: headerHeight, right: clientWidth - 10, bottom: Math.min(window.innerHeight, whatsappTop) - 10 };
 
   const { k, t } = findSegment(holds, scrollY);
